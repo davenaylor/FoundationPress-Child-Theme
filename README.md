@@ -13,7 +13,6 @@ the parent theme. It's essentially a mirror of the FoundationPress structure.
   * [Node.js](http://nodejs.org)
   * [Grunt](http://gruntjs.com/): Run `[sudo] npm install -g grunt-cli`
   * [Bower](http://bower.io): Run `[sudo] npm install -g bower`
-  * FoundationPress parent theme installed
 
 ## Quickstart
 
