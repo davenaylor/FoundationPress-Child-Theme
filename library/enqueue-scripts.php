@@ -1,6 +1,6 @@
 <?php
 
-function FoundationPress_scripts() {
+function foundationpress_scripts() {
 
     // Enqueue Main Stylesheet
     wp_enqueue_style( 'Main Stylesheet', get_stylesheet_directory_uri() . '/css/foundation.css' );
@@ -32,4 +32,4 @@ function FoundationPress_scripts() {
 
   }
 
-add_action( 'wp_enqueue_scripts', 'FoundationPress_scripts' );
+add_action( 'wp_enqueue_scripts', 'foundationpress_scripts' );
