@@ -37,9 +37,15 @@ If you get a fatal error during installation, it might be related to a libsass
 incompability issue with the latest version of nodejs. Check the guide at the
 bottom of this page: https://github.com/olefredrik/FoundationPress/issues/209
 
+### browserSync
+
+If you want to watch realtime updates as you work, edit the local.dev line in
+the Gruntfile.js file to reflect your own local developemnt URL
+
+
 While you're working on your project, run:
 
-`grunt watch`
+`grunt`
 
 And you're set!
 
