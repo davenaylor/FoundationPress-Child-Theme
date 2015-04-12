@@ -131,7 +131,7 @@ module.exports = function(grunt) {
           },
         options: {
             watchTask: true,
-            proxy: "sandbox-one.sandbox.uk"
+            proxy: "local.dev"
         }
       }
     }

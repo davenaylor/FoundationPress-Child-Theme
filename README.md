@@ -39,13 +39,14 @@ bottom of this page: https://github.com/olefredrik/FoundationPress/issues/209
 
 ### browserSync
 
-If you want to watch realtime updates as you work, edit the local.dev line in
-the Gruntfile.js file to reflect your own local developemnt URL
-
+If you want to watch realtime updates as you work, edit the `local.dev` line in
+the Gruntfile.js file to reflect your own local development URL
 
 While you're working on your project, run:
 
-`grunt`
+`grunt` for watching and browserSync or `grunt watch` to just watch your
+project.
 
-And you're set!
+
+
 
