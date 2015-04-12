@@ -122,8 +122,20 @@ module.exports = function(grunt) {
             livereload:true,
         }
       }
+    },
+
+    browserSync: {
+      dev: {
+        bsFiles: {
+            src : 'css/foundation.css'
+          },
+        options: {
+            watchTask: true,
+            proxy: "sandbox-one.sandbox.uk"
+        }
+      }
     }
-  });
+});
 
   grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
@@ -131,7 +143,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-string-replace');
+  grunt.loadNpmTasks('grunt-browser-sync');
 
   grunt.registerTask('build', ['copy', 'string-replace:fontawesome', 'sass', 'concat', 'uglify']);
-  grunt.registerTask('default', ['watch']);
+  grunt.registerTask('default', ['browserSync', 'watch']);
 };
