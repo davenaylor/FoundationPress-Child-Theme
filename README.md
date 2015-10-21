@@ -18,24 +18,21 @@ the parent theme. It's essentially a mirror of the FoundationPress structure.
 
 ```bash
 cd your-wordpress-directory/wp-content/themes/
-git clone git@github.com:olefredrik/FoundationPress
+git clone git@github.com:olefredrik/FoundationPress foundationpress/
 git clone git@github.com:davenaylor/FoundationPress-Child-Theme your-theme-name
 cd your-theme-name
-npm install && bower install && grunt build
+npm install
 ```
+It's important the parent foundationpress theme directory is all lowercase:
+**foundationpress**
 You don't need the bower/node installation in the parent theme since we've installed
 all the required components in the child.
 
-**Tip 1:** 
+**Tip** 
 If you get an error saying Permission denied (publickey) when cloning the
 repository, use the https protocol instead:
-```git clone https://github.com/olefredrik/FoundationPress```
+```git clone https://github.com/olefredrik/FoundationPress foundationpress/```
 ```git clone https://github.com/davenaylor/FoundationPress-Child-Theme your-theme-name```
-
-**Tip 2:**
-If you get a fatal error during installation, it might be related to a libsass
-incompability issue with the latest version of nodejs. Check the guide at the
-bottom of this page: https://github.com/olefredrik/FoundationPress/issues/209
 
 ### browserSync
 
