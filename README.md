@@ -8,11 +8,28 @@ This child theme uses its own Foundation installation.  All javascript, sass
 files and bower packages are self contained and don't need to be referenced from
 the parent theme. It's essentially a mirror of the FoundationPress structure. 
 
-**Okay, so you'll need to have the following items installed before continuing.**
+## Requirements
 
-  * [Node.js](http://nodejs.org)
-  * [Grunt](http://gruntjs.com/): Run `[sudo] npm install -g grunt-cli`
-  * [Bower](http://bower.io): Run `[sudo] npm install -g bower`
+This project requires [Node.js](http://nodejs.org) v4.x.x  to be installed on your machine. Please be aware that you may encounter problems with the installation if youare using v5.1.0 with all the latest features.
+
+***Note***
+
+I personally use nodejs 5.2.0.  In order to get the build process to complete I had to install [es6-promise](https://github.com/jakearchibald/es6-promise)
+
+```bash
+npm install es6-promise
+```
+Uncomment this at the top of your gulpfile
+ 
+```bash
+require('es6-promise').polyfill();
+```
+
+FoundationPress uses [Sass](http://Sass-lang.com/) (CSS with superpowers). In short, Sass is a CSS pre-processor that allows you to write styles more effectively and tidy.
+
+The Sass is compiled using libsass, which requires the GCC to be installed on your machine.
+
+If you have not worked with a Sass-based workflow before, I would recommend reading [FoundationPress for beginners](https://foundationpress.olefredrik.com/posts/tutorials/foundationpress-for-beginners), a short blog post that explains what you need to know.
 
 ## Quickstart
 
