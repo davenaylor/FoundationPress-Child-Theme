@@ -27,7 +27,7 @@ require('es6-promise').polyfill();
 
 FoundationPress uses [Sass](http://Sass-lang.com/) (CSS with superpowers). In short, Sass is a CSS pre-processor that allows you to write styles more effectively and tidy.
 
-The Sass is compiled using libsass, which requires the GCC to be installed on your machine.
+The Sass is compiled using libsass, which requires the GCC to be installed on your machine. Windows users can install it through [MinGW](http://www.mingw.org/), and Mac users can install it through the [Xcode Command-line Tools](http://osxdaily.com/2014/02/12/install-command-line-tools-mac-os-x/).
 
 If you have not worked with a Sass-based workflow before, I would recommend reading [FoundationPress for beginners](https://foundationpress.olefredrik.com/posts/tutorials/foundationpress-for-beginners), a short blog post that explains what you need to know.
 
@@ -100,4 +100,29 @@ Version control on these files are turned off because they are automatically gen
 
 * `assets/javascript/vendor`: Vendor scripts are copied from `assets/components/` to this directory. We use this path for enqueing the vendor scripts in WordPress.
 
+### Check For WordPress Coding Standards
+
+Foundation comes with everything you need to run tests that will check your theme for WordPress Coding Standards. To enable this feature you'll need to install PHP Codesniffer, along with the WordPress Coding Standards set of "Sniffs". You'll need to have [Composer](https://getcomposer.org/) To install both run the following:
+```bash
+$ composer create-project wp-coding-standards/wpcs:dev-master --no-dev
+```
+When prompted to remove existing VCS, answer Yes by typing `Y`.
+
+Once you have installed the packages, you can check your entire theme by running:
+```bash
+$ npm run phpcs
+```
+
+If there are errors that Code Sniffer can fix automatically, run the following command to fix them:
+```bash
+$ npm run phpcbf
+```
+
+## Demo
+
+
+* [Clean FoundationPress install](http://foundationpress.olefredrik.com/)
+* [FoundationPress Kitchen Sink - see every single element in action](http://foundationpress.olefredrik.com/kitchen-sink/)
+
+## Unit Testing With Travis-CI
 
