@@ -3,7 +3,7 @@
 function foundationpress_scripts() {
 
     // Enqueue the main Stylesheet.
-    wp_enqueue_style( 'main-stylesheet', get_stylesheet_directory_uri() . '/assets/stylesheets/foundation.css', array(), '2.2.0', 'all' );
+    wp_enqueue_style( 'main-stylesheet', get_stylesheet_directory_uri() . '/assets/stylesheets/foundation.css', array(), '2.3.0', 'all' );
 
     // Deregister the jquery version bundled with WordPress.
     wp_deregister_script( 'jquery' );
@@ -13,7 +13,7 @@ function foundationpress_scripts() {
 
     // If you'd like to cherry-pick the foundation components you need in your project, head over to Gruntfile.js and see lines 67-88.
     // It's a good idea to do this, performance-wise. No need to load everything if you're just going to use the grid anyway, you know :)
-    wp_enqueue_script( 'foundation', get_stylesheet_directory_uri() . '/assets/javascript/foundation.js', array('jquery'), '2.2.0', true );
+    wp_enqueue_script( 'foundation', get_stylesheet_directory_uri() . '/assets/javascript/foundation.js', array('jquery'), '2.3.0', true );
 
     // Add the comment-reply library on pages where it is necessary
     if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
