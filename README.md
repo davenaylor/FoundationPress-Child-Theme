@@ -6,123 +6,85 @@ https://github.com/olefredrik/FoundationPress
 
 This child theme uses its own Foundation installation.  All javascript, sass
 files and bower packages are self contained and don't need to be referenced from
-the parent theme. It's essentially a mirror of the FoundationPress structure. 
+the parent theme. It's essentially a mirror of the FoundationPress structure.
 
 ## Requirements
 
-This project requires [Node.js](http://nodejs.org) v4.x.x  to be installed on your machine. Please be aware that you may encounter problems with the installation if youare using v5.1.0 with all the latest features.
+This project requires Node.js v4.x.x to v6.11.x to be installed on your machine. Please be aware that you might encounter problems with the installation if you are using the most current Node version (bleeding edge) with all the latest features.
 
-***Note***
+FoundationPress uses Sass (CSS with superpowers). In short, Sass is a CSS pre-processor that allows you to write styles more effectively and tidy.
 
-I personally use nodejs 5.2.0.  In order to get the build process to complete I had to install [es6-promise](https://github.com/jakearchibald/es6-promise)
+The Sass is compiled using libsass, which requires the GCC to be installed on your machine. Windows users can install it through MinGW, and Mac users can install it through the Xcode Command-line Tools.
 
-```bash
-npm install es6-promise
-```
-Uncomment this at the top of your gulpfile
- 
-```bash
-require('es6-promise').polyfill();
-```
-
-FoundationPress uses [Sass](http://Sass-lang.com/) (CSS with superpowers). In short, Sass is a CSS pre-processor that allows you to write styles more effectively and tidy.
-
-The Sass is compiled using libsass, which requires the GCC to be installed on your machine. Windows users can install it through [MinGW](http://www.mingw.org/), and Mac users can install it through the [Xcode Command-line Tools](http://osxdaily.com/2014/02/12/install-command-line-tools-mac-os-x/).
-
-If you have not worked with a Sass-based workflow before, I would recommend reading [FoundationPress for beginners](https://foundationpress.olefredrik.com/posts/tutorials/foundationpress-for-beginners), a short blog post that explains what you need to know.
+If you have not worked with a Sass-based workflow before, I would recommend reading FoundationPress for beginners, a short blog post that explains what you need to know.
 
 ## Quickstart
 
 ### 1. Clone the repository and install with npm
 
 ```bash
-cd my-wordpress-folder/wp-content/themes/
-git clone https://github.com/olefredrik/FoundationPress.git foundationpress/
+cd my-wordpress-installation/themes/
+git clone https://github.com/olefredrik/FoundationPress.git
 git clone https://github.com:davenaylor/FoundationPress-Child-Theme your-theme-name/
 cd your-theme-name
 Edit style.css to insert your own details/theme name
 npm install
 ```
-It's important the parent foundationpress theme directory is all lowercase:
-**foundationpress**
 
-You don't need the bower/node installation in the parent theme since we've installed
+You don't need to run npm install in the parent theme since we've installed
 all the required components in the child.
 
-### 2. While you're working on your project, run:
+### 2. Configuration
 
-``bash
-$ npm run watch
-``
+#### YAML config file
+FoundationPress includes a `config-default.yml` file. To make changes to the configuration, make a copy of `config-default.yml` and name it `config.yml` and make changes to that file. The `config.yml` file is ignored by git so that each environment can use a different configuration with the same git repo.
 
-If you want to take advantage of browser-sync (automatic browser refresh when a
-file is saved), simply open your Gulpfile.js and put your local dev-server
-address (e.g localhost) in this field ``var URL = '';`` , save the Gulpfile and
-run
-``bash
-$ npm run watch
-``
+At the start of the build process a check is done to see if a `config.yml` file exists. If `config.yml` exists, the configuration will be loaded from `config.yml`. If `config.yml` does not exist, `config-default.yml` will be used as a fallback.
 
-### 3. For building all the assets, run:
+#### Browsersync setup
+If you want to take advantage of [Browsersync](https://www.browsersync.io/) (automatic browser refresh when a file is saved), simply open your `config.yml` file after creating it in the previous step, and put your local dev-server address and port (e.g http://localhost:8888) in the `url` property under the `BROWSERSYNC` object.
 
-``bash
+### 3. Get started
+
+```bash
+$ npm start
+```
+
+### 4. Compile assets for production
+
+When building for production, the CSS and JS will be minified. To minify the assets in your `/dist` folder, run
+
+```bash
 $ npm run build
-``
+```
 
-Build all assets minified and without sourcemaps:
-``bash
-$ npm run production`
+### Project structure
 
-### Styles
+In the `/src` folder you will the working files for all your assets. Every time you make a change to a file that is watched by Gulp, the output will be saved to the `/dist` folder. The contents of this folder is the compiled code that you should not touch (unless you have a good reason for it).
+
+The `/page-templates` folder contains templates that can be selected in the Pages section of the WordPress admin panel. To create a new page-template, simply create a new file in this folder and make sure to give it a template name.
+
+I guess the rest is quite self explanatory. Feel free to ask if you feel stuck.
+
+### Styles and Sass Compilation
 
  * `style.css`: Do not worry about this file. (For some reason) it's required by WordPress. All styling are handled in the Sass files described below
 
- * `assets/scss/foundation.scss`: Make imports for all your styles here
- * `assets/scss/global/*.scss`: Global settings
- * `assets/scss/components/*.scss`: Buttons etc.
- * `assets/scss/modules/*.scss`: Topbar, footer etc.
- * `assets/scss/templates/*.scss`: Page template spesific styling
+ * `src/assets/scss/app.scss`: Make imports for all your styles here
+ * `src/assets/scss/global/*.scss`: Global settings
+ * `src/assets/scss/components/*.scss`: Buttons etc.
+ * `src/assets/scss/modules/*.scss`: Topbar, footer etc.
+ * `src/assets/scss/templates/*.scss`: Page template styling
 
-Please note that you **must** run `npm run build` or `npm run watch` in your terminal for the styles to be copied and concatinated. See the [Gulpfile.js](https://github.com/olefredrik/FoundationPress/blob/master/gulpfile.js) for details
+ * `dist/assets/css/app.css`: This file is loaded in the `<head>` section of your document, and contains the compiled styles for your project.
 
-### Scripts
+If you're new to Sass, please note that you need to have Gulp running in the background (``npm start``), for any changes in your scss files to be compiled to `app.css`.
 
-* `assets/javascript/custom`: This is the folder where you put all your custom scripts. Every .js file you put in this directory will be minified and concatinated one single .js file. (This is good for site speed and performance)
+### JavaScript Compilation
 
-Please note that you must run `npm run build` or `npm run watch` in your terminal for the scripts to be copied and concatinated. See [Gulpfile.js](https://github.com/olefredrik/FoundationPress/blob/master/gulpfile.js) for details
+All JavaScript files in the `src/assets/js` folder, along ith Foundation and its dependencies, are bundled into one file called `app.js`. The files are imported using module dependency with [webpack](https://webpack.js.org/) as the module bundler.
 
-### The main styles and scripts generated by the build
+If you're unfamiliar with modules and module bundling, check out [this resource for node style require/exports](http://openmymind.net/2012/2/3/Node-Require-and-Exports/) and [this resource to understand ES6 modules](http://exploringjs.com/es6/ch_modules.html).
 
-Version control on these files are turned off because they are automatically generated as part of the build process.
-
-* `assets/stylesheets/foundation.css`: All Sass files are minified and compiled to this file
-* `assets/stylesheets/foundation.css.map`: CSS source maps
-
-* `assets/javascript/vendor`: Vendor scripts are copied from `assets/components/` to this directory. We use this path for enqueing the vendor scripts in WordPress.
-
-### Check For WordPress Coding Standards
-
-Foundation comes with everything you need to run tests that will check your theme for WordPress Coding Standards. To enable this feature you'll need to install PHP Codesniffer, along with the WordPress Coding Standards set of "Sniffs". You'll need to have [Composer](https://getcomposer.org/) To install both run the following:
-```bash
-$ composer create-project wp-coding-standards/wpcs:dev-master --no-dev
-```
-When prompted to remove existing VCS, answer Yes by typing `Y`.
-
-Once you have installed the packages, you can check your entire theme by running:
-```bash
-$ npm run phpcs
-```
-
-If there are errors that Code Sniffer can fix automatically, run the following command to fix them:
-```bash
-$ npm run phpcbf
-```
-
-## Demo
-
-
-* [Clean FoundationPress install](http://foundationpress.olefredrik.com/)
-* [FoundationPress Kitchen Sink - see every single element in action](http://foundationpress.olefredrik.com/kitchen-sink/)
-
-## Unit Testing With Travis-CI
+Foundation modules are loaded in the `src/assets/js/app.js` file. By default all components are loaded. You can also pick and choose which modules to include. Just follow the instructions in the file.
 
