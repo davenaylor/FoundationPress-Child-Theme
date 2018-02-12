@@ -1,7 +1,6 @@
 'use strict';
 
 import plugins       from 'gulp-load-plugins';
-import gutil         from 'gulp-util';
 import yargs         from 'yargs';
 import browser       from 'browser-sync';
 import gulp          from 'gulp';
@@ -12,6 +11,8 @@ import dateFormat    from 'dateformat';
 import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
+import log           from 'fancy-log';
+import colors        from 'ansi-colors';
 
 // Load all Gulp plugins into one variable
 const $ = plugins();
@@ -38,24 +39,24 @@ function checkFileExists(filepath) {
 
 // Load default or custom YML config file
 function loadConfig() {
-  gutil.log('Loading config file...');
+  log('Loading config file...');
 
   if (checkFileExists('config.yml')) {
     // config.yml exists, load it
-    gutil.log(gutil.colors.cyan('config.yml'), 'exists, loading', gutil.colors.cyan('config.yml'));
+    log(colors.bold(colors.cyan('config.yml')), 'exists, loading', colors.bold(colors.cyan('config.yml')));
     let ymlFile = fs.readFileSync('config.yml', 'utf8');
     return yaml.load(ymlFile);
 
   } else if(checkFileExists('config-default.yml')) {
     // config-default.yml exists, load it
-    gutil.log(gutil.colors.cyan('config.yml'), 'does not exist, loading', gutil.colors.cyan('config-default.yml'));
+    log(colors.bold(colors.cyan('config.yml')), 'does not exist, loading', colors.bold(colors.cyan('config-default.yml')));
     let ymlFile = fs.readFileSync('config-default.yml', 'utf8');
     return yaml.load(ymlFile);
 
   } else {
     // Exit if config.yml & config-default.yml do not exist
-    gutil.log('Exiting process, no config file exists.');
-    gutil.log('Error Code:', err.code);
+    log('Exiting process, no config file exists.');
+    log('Error Code:', err.code);
     process.exit(1);
   }
 }
@@ -95,61 +96,62 @@ function sass() {
     .pipe(browser.reload({ stream: true }));
 }
 
-let webpackConfig = {
-  module: {
-    rules: [
-      {
-        test: /.js$/,
-        loader: 'babel-loader',
-        exclude: (PRODUCTION ? undefined : /node_modules/),
-      }
-    ]
-  },
-  externals: {
-    jquery: 'jQuery'
-  }
-}
-
 // Combine JavaScript into one file
 // In production, the file is minified
 const webpack = {
-  build: () => {
+  config: {
+    module: {
+      rules: [
+        {
+          test: /.js$/,
+          loader: 'babel-loader',
+          exclude: /node_modules(?!\/foundation-sites)/,
+        },
+      ],
+    },
+    externals: {
+      jquery: 'jQuery',
+    },
+  },
+
+  changeHandler(err, stats) {
+    log('[webpack]', stats.toString({
+      colors: true,
+    }));
+    
+    browser.reload();
+  },
+
+  build() {
     return gulp.src(PATHS.entries)
       .pipe(named())
-      .pipe(webpackStream(webpackConfig, webpack2))
+      .pipe(webpackStream(webpack.config, webpack2))
       .pipe($.if(PRODUCTION, $.uglify()
-        .on('error', e => { console.log(e); })
+        .on('error', e => { console.log(e); }),
       ))
       .pipe($.if(REVISIONING && PRODUCTION || REVISIONING && DEV, $.rev()))
       .pipe(gulp.dest(PATHS.dist + '/assets/js'))
       .pipe($.if(REVISIONING && PRODUCTION || REVISIONING && DEV, $.rev.manifest()))
       .pipe(gulp.dest(PATHS.dist + '/assets/js'));
   },
-  watch: () => {
-    const webpackChangeHandler = function (err, stats) {
-      gutil.log('[webpack]', stats.toString({
-        colors: true,
-      }));
 
-      browser.reload();
-    };
-
-    const webpackConfig = Object.assign({}, webpackConfig, {
+  watch() {
+    const watchConfig = Object.assign(webpack.config, {
       watch: true,
       devtool: 'inline-source-map',
     });
 
     return gulp.src(PATHS.entries)
       .pipe(named())
-      .pipe(webpackStream(webpackConfig, webpack2, webpackChangeHandler)
+      .pipe(webpackStream(watchConfig, webpack2, webpack.changeHandler)
         .on('error', (err) => {
-          gutil.log('[webpack:error]', err.toString({
+          log('[webpack:error]', err.toString({
             colors: true,
           }));
-        })
+        }),
       )
       .pipe(gulp.dest(PATHS.dist + '/assets/js'));
-  }
+  },
 };
 
 gulp.task('webpack:build', webpack.build);
@@ -221,8 +223,12 @@ function reload(done) {
 // Watch for changes to static assets, pages, Sass, and JavaScript
 function watch() {
   gulp.watch(PATHS.assets, copy);
-  gulp.watch('src/assets/scss/**/*.scss', sass);
-  gulp.watch('**/*.php', reload);
+  gulp.watch('src/assets/scss/**/*.scss', sass)
+    .on('change', path => log('File ' + colors.bold(colors.magenta(path)) + ' changed.'))
+    .on('unlink', path => log('File ' + colors.bold(colors.magenta(path)) + ' was removed.'));
+  gulp.watch('**/*.php', reload)
+    .on('change', path => log('File ' + colors.bold(colors.magenta(path)) + ' changed.'))
+    .on('unlink', path => log('File ' + colors.bold(colors.magenta(path)) + ' was removed.'));
   gulp.watch('src/assets/images/**/*', gulp.series(images, browser.reload));
 }
 
