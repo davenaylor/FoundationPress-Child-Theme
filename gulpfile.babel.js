@@ -105,7 +105,7 @@ const webpack = {
         {
           test: /.js$/,
           loader: 'babel-loader',
-          exclude: /node_modules(?!\/foundation-sites)/,
+          exclude: /node_modules(?![\\\/]foundation-sites)/,
         },
       ],
     },
@@ -118,7 +118,7 @@ const webpack = {
     log('[webpack]', stats.toString({
       colors: true,
     }));
-    
+
     browser.reload();
   },
 
@@ -197,7 +197,7 @@ gulp.task('phpcbf', function () {
     standard: './codesniffer.ruleset.xml',
     warningSeverity: 0
   }))
-  .on('error', $.util.log)
+  .on('error', log)
   .pipe(gulp.dest('.'));
 });
 
